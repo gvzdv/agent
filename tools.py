@@ -2,20 +2,20 @@
 import requests
 
 def get_weather(lat, lon):
-    """
-    Basic integration with YR Weather:
-    https://developer.yr.no/doc/GettingStarted/
-    """
-    # Pseudo-code
-    # 1. YR requires HTTP headers including a User-Agent
-    url = f"https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={lat}&lon={lon}"
-    headers = {
-        "User-Agent": "MyWeatherApp/1.0 contact@example.com"
-    }
-    resp = requests.get(url, headers=headers)
-    data = resp.json()
-    # parse data
-    # Return a short textual forecast
+    # """
+    # Basic integration with YR Weather:
+    # https://developer.yr.no/doc/GettingStarted/
+    # """
+    # # Pseudo-code
+    # # 1. YR requires HTTP headers including a User-Agent
+    # url = f"https://api.met.no/weatherapi/locationforecast/2.0/compact?lat={lat}&lon={lon}"
+    # headers = {
+    #     "User-Agent": "MyWeatherApp/1.0 contact@example.com"
+    # }
+    # resp = requests.get(url, headers=headers)
+    # data = resp.json()
+    # # parse data
+    # # Return a short textual forecast
     return {"forecast": "It might be sunny, data from YR: ..."}  
 
 def add_event(summary, start_time, end_time):

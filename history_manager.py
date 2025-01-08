@@ -1,8 +1,13 @@
 from collections import defaultdict
 import os
-import openai
+from openai import OpenAI
+import os
+from dotenv import load_dotenv
 
-openai.api_key = os.environ.get("OPENAI_API_KEY", "")
+load_dotenv()
+
+openai_api_key = os.getenv("OPENAI_API_KEY")
+client = OpenAI(api_key=openai_api_key)
 
 CONVERSATION_STORE = defaultdict(list)
 MAX_MESSAGES = 20  # keep last 20 messages in raw form
@@ -52,8 +57,8 @@ def summarize_conversation(messages):
         content_str += f"{role.upper()}: {text}\n\n"
     
     # Simple summarization call
-    response = openai.ChatCompletion.create(
-        model="gpt-4-0613",
+    response = client.chat.completions.create(
+        model="gpt-4o",
         messages=[
             {
                 "role": "system",
@@ -64,8 +69,8 @@ def summarize_conversation(messages):
                 "content": content_str
             }
         ],
-        max_tokens=150,
+        max_tokens=2046,
         temperature=0.5
     )
     
-    return response["choices"][0]["message"]["content"]
+    return response.choices[0].message.content
