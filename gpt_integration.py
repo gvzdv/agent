@@ -13,19 +13,19 @@ load_dotenv()
 openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
 
+LATITUDE=45.486842
+LONGITUDE=-73.563944
+
 FUNCTIONS = [
     {
         "type": "function",
         "function": {
             "name": "get_weather",
-            "description": "Get the weather for a location using YR.",
+            "description": "Get the weather forecast.",
             "parameters": {
                 "type": "object",
                 "properties": {
-                    "lat": {"type": "number"},
-                    "lon": {"type": "number"}
                 },
-                "required": ["lat", "lon"]
             }
         }
     },
@@ -91,21 +91,22 @@ def process_user_message(chat_id, history):
     )
     
     message = response.choices[0].message
-    print(message)
-    print('--------')
-    print(message.tool_calls[0].function.name)
+    # print(message)
+    # print('--------')
+    # print(message.tool_calls[0].function.name)
     
     tool_call = message.tool_calls
 
     if tool_call is not None:
-        print('Tool call in message')
+        # print('Tool call in message')
         fn_name = tool_call[0].function.name
-        args = json.loads(tool_call[0].function.arguments)
-        print(fn_name, args)
+        # right now lat/lon are hardcoded, so we don't parse them from the function call
+        # args = json.loads(tool_call[0].function.arguments)
+        # print(fn_name, args)
         
         # Call the relevant tool
         if fn_name == "get_weather":
-            result = get_weather(**args)
+            result = get_weather(LATITUDE, LONGITUDE)
         # elif fn_name == "add_event":
         #     result = add_event(**args)
         # elif fn_name == "get_events":
@@ -118,6 +119,7 @@ def process_user_message(chat_id, history):
             result = {"error": "No such function."}
         history.append({"role": "assistant", "content": result})
         print(result)
+        return result
         
         # Provide result to GPT-4 to finalize response.
         # For now, I skip this part and return the answer directly from the function.
@@ -148,7 +150,7 @@ test_history = [
   },
   {
       "role": "user",
-      "content": "what's the weather today? my latitude is 60 north and longitude is 30 west"
+      "content": "what's the weather today?"
   }
 ]
 
