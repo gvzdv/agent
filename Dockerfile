@@ -1,6 +1,14 @@
-FROM python:3.10-slim
-WORKDIR /app
+FROM python:3.12-slim
+
+# Environment variables
+
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
-COPY . .
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+
+# Copy application code
+COPY . /app
+WORKDIR /app
+
+# Run the application
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "main:app"]
