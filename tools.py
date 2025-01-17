@@ -10,11 +10,17 @@ load_dotenv()
 NOTION_DB_ID = os.getenv("NOTION_DB_ID")
 NOTION_TOKEN = os.getenv("NOTION_TOKEN")
 
+LOCAL_TIMEZONE = os.getenv("LOCAL_TIMEZONE")
+
+
 # Helper function: Convert UTC time to Montreal local time
 def convert_to_local_time(utc_time):
     utc_time = datetime.strptime(utc_time, "%Y-%m-%dT%H:%M:%SZ")
-    montreal_tz = pytz.timezone("America/Montreal")
-    return utc_time.replace(tzinfo=pytz.utc).astimezone(montreal_tz)
+    try:
+        target_tz = pytz.timezone(LOCAL_TIMEZONE)
+        return utc_time.replace(tzinfo=pytz.utc).astimezone(target_tz)
+    except pytz.UnknownTimeZoneError:
+        raise ValueError(f"Invalid timezone: {LOCAL_TIMEZONE}")
 
 
 def get_weather(lat, lon):

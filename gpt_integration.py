@@ -14,8 +14,8 @@ load_dotenv()
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 client = openai.OpenAI(api_key=OPENAI_API_KEY)
 
-LATITUDE = 45.486842
-LONGITUDE = -73.563944
+LATITUDE = os.getenv("LATITUDE")
+LONGITUDE = os.getenv("LONGITUDE")
 
 FUNCTIONS = [
     {
